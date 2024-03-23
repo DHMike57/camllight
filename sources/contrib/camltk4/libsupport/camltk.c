@@ -187,7 +187,7 @@ value camltk_opentk(display, name) /* ML */
         tkargv[1] = String_val(display);
         args = Tcl_Merge(2, (CONST84 char * CONST *) tkargv);
         Tcl_SetVar(cltclinterp, "argv", args, TCL_GLOBAL_ONLY);
-        free(args);
+        Tcl_Free(args);
       }
     }
     if (Tk_Init(cltclinterp) != TCL_OK)
@@ -399,7 +399,7 @@ value v;
   /* Free the various things we allocated */
   stat_free((char *)argv);
   for (i=wherewasi; i<whereami; i++)
-    free(tcllists[i]);
+    Tcl_Free(tcllists[i]);
   startfree = wherewasi;
 
   switch (result) {
@@ -426,7 +426,7 @@ value camltk_splitlist (v) /* ML */
   switch(result) {
   case TCL_OK:
    { value res = copy_string_list(argc,argv);
-     free((char *)argv);        /* only one large block was allocated */
+     Tcl_Free((char *)argv);        /* only one large block was allocated */
      return res;
    }
   case TCL_ERROR:
