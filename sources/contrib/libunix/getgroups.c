@@ -3,19 +3,26 @@
 
 #ifdef HAS_GETGROUPS
 
-#include <sys/types.h>
-#include <sys/param.h>
 #include "unix.h"
 
 value unix_getgroups()           /* ML */
 {
-  int gidset[NGROUPS];
   int n;
   value res;
   int i;
+  long ngroups_max;
 
-  n = getgroups(NGROUPS, gidset);
-  if (n == -1) uerror("getgroups", Nothing);
+#ifdef NGROUPS
+  gid_t gidset[NGROUPS];
+  ngroups_max = NGROUPS;
+#else
+  ngroups_max = sysconf(_SC_NGROUPS_MAX) + 1;
+  gid_t gidset[ngroups_max];
+#endif /* NGROUPS */
+
+  n = getgroups(ngroups_max, gidset);
+  if (n == -1)
+  	uerror("getgroups", Nothing);
   res = alloc_tuple(n);
   for (i = 0; i < n; i++)
     Field(res, i) = Val_int(gidset[i]);

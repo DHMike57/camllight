@@ -1,5 +1,4 @@
 #include <mlvalues.h>
-#include <fcntl.h>
 #include "unix.h"
 
 #ifdef HAS_FCHMOD

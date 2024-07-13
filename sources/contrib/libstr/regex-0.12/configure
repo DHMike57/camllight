@@ -281,28 +281,22 @@ rm -f conftest*
 fi
 rm -f conftest*
 
-for hdr in string.h
-do
-trhdr=HAVE_`echo $hdr | tr '[a-z]./' '[A-Z]__'`
-echo checking for ${hdr}
+echo checking for string.h
 cat > conftest.c <<EOF
-#include <${hdr}>
+#include <string.h>
+int main() { return(0); } 
 EOF
-err=`eval "$CPP $DEFS conftest.c 2>&1 >/dev/null"`
-if test -z "$err"; then
-  DEFS="$DEFS -D${trhdr}=1"
+if eval $compile; then
+  DEFS="$DEFS -DHAVE_STRING_H=1"
 fi
-rm -f conftest*
-done
-
 
 # The Ultrix 4.2 mips builtin alloca declared by alloca.h only works
 # for constant arguments.  Useless!
 echo checking for working alloca.h
 cat > conftest.c <<EOF
 #include <alloca.h>
-main() { exit(0); } 
-t() { char *p = alloca(2 * sizeof(int)); }
+int main() { return(0); } 
+void t() { char *p = alloca(2 * sizeof(int)); }
 EOF
 if eval $compile; then
   DEFS="$DEFS -DHAVE_ALLOCA_H=1"

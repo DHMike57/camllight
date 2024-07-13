@@ -1,4 +1,5 @@
 #include <mlvalues.h>
+#include <signals.h>
 #include "unix.h"
 
 value unix_write(fd, buf, ofs, len) /* ML */

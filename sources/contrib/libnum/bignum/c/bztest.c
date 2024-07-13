@@ -3,6 +3,12 @@
 /*      modified_on Mon Apr 15 18:44:14 GMT+2:00 1991 by herve */
 
 #include <stdio.h>
+#ifdef HAS_STRING_H
+#include <string.h>
+#else
+extern int strcmp(char*, char*);
+#endif
+
 #include "BigZ.h"
 
 #ifndef MSDOS
@@ -47,7 +53,7 @@ char *B, *C;
 #define two31m1         FromI(0x7FFFFFFF)
 #endif
 
-main()
+int main()
 {
    BigZ a,b;
 
@@ -164,4 +170,6 @@ main()
    T(91,To (b),To(Div (Sqa (b),b)));
    T(92,"-1",To(Div(From("13"),From("-13"))));
    NEWLINE;
+
+   return 0;
 }

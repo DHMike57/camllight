@@ -2,6 +2,7 @@
 #include "../runtime/fail.h"
 #include "../runtime/io.h"
 #include "../runtime/alloc.h"
+#include "../runtime/memory.h"
 
 #define Alloc(res, size, tag) if (size < Max_young_wosize) \
                                 res = alloc(size, tag); \

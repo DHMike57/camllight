@@ -12,6 +12,8 @@
 #include <alloc.h>
 #include <memory.h>
 #include <fail.h>
+#include <interp.h>
+#include <signals.h>
 
 /* The Tcl interpretor */
 Tcl_Interp *cltclinterp = NULL;
@@ -314,14 +316,14 @@ value v;
   case 0:
     argv[where] = String_val(Field(v,0));
     return (where + 1);
-  case 1:
-    { value l;
+  case 1: {
+	  value l;
       for (l=Field(v,0); Tag_val(l)==1; l=Field(l,1))
         where = fill_args(argv,where,Field(l,0));
       return where;
     }
-  case 2:
-    { char **tmpargv;
+  case 2: {
+	  char **tmpargv;
       int size = argv_size(Field(v,0));
       if (size < 16)
         tmpargv = &quotedargv[0];
@@ -329,7 +331,7 @@ value v;
         tmpargv = (char **)stat_alloc((size + 1) * sizeof(char *));
       fill_args(tmpargv,0,Field(v,0));
       tmpargv[size] = NULL;
-      argv[where] = Tcl_Merge(size,tmpargv);
+      argv[where] = Tcl_Merge(size, (const char* const*) tmpargv);
       tcllists[startfree++] = argv[where]; /* so we can free it later */
       if (size >= 16)
         stat_free((char *)tmpargv);
@@ -344,7 +346,7 @@ value v;
 {
   int i;
   int size;                     /* size of argv */
-  char **argv;
+  const char **argv;
   int result;
   Tcl_CmdInfo info;
   int wherewasi,whereami;       /* positions in tcllists array */
@@ -358,7 +360,7 @@ value v;
   /* +4: one slot for NULL
          one slot for "unknown" if command not found
          two slots for chaining local roots */
-  argv = (char **)stat_alloc((size + 4) * sizeof(char *));
+  argv = (const char **)stat_alloc((size + 4) * sizeof(char *));
 
   wherewasi = startfree;
 
@@ -417,7 +419,7 @@ value camltk_splitlist (v) /* ML */
      value v;
 {
   int argc;
-  char **argv;
+  const char **argv;
   int result;
 
   if (!cltclinterp) tk_error("Tcl/Tk not initialised");
@@ -537,7 +539,8 @@ value camltk_rem_timer(token) /* ML */
 
 /* Forward declaration to keep the compiler happy */
 static char *           WaitVariableProc _ANSI_ARGS_((ClientData clientData,
-                            Tcl_Interp *interp, char *name1, char *name2,
+                            Tcl_Interp *interp,
+							const char *name1, const char *name2,
                             int flags));
 static void             WaitVisibilityProc _ANSI_ARGS_((ClientData clientData,
                             XEvent *eventPtr));
@@ -547,8 +550,8 @@ static void             WaitWindowProc _ANSI_ARGS_((ClientData clientData,
 static char * WaitVariableProc(clientdata, interp, name1, name2, flags)
      ClientData clientdata;
      Tcl_Interp *interp;        /* Interpreter containing variable. */
-     char *name1;               /* Name of variable. */
-     char *name2;               /* Second part of variable name. */
+     const char *name1;         /* Name of variable. */
+     const char *name2;         /* Second part of variable name. */
      int flags;                 /* Information about what happened. */
 {
   char *fullvar;

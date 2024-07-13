@@ -5,6 +5,7 @@
 #include <alloc.h>
 #include <fail.h>
 #include <stacks.h>
+#include <str.h>
 
 struct regexp_struct {
   final_fun finalization;

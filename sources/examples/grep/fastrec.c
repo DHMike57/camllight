@@ -1,6 +1,7 @@
 /* La version C de la fonction determ__reconnait */
 
 #include "mlvalues.h"
+#include "str.h"
 
 value reconnait(automate, chaine)
         value automate, chaine;

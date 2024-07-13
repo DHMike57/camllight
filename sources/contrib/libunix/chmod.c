@@ -1,5 +1,4 @@
 #include <mlvalues.h>
-#include <fcntl.h>
 #include "unix.h"
 
 value unix_chmod(path, perm)     /* ML */

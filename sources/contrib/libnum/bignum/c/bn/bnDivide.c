@@ -16,11 +16,6 @@
 static char copyright[]="@(#)bnDivide.c: copyright Digital Equipment Corporation & INRIA 1988, 1989, 1990\n";
 
 
-static divide (nn, nl, dd, dl)
-
-	 BigNum		nn, dd;
-register BigNumLength 	nl, dl;
-
 /*
  * In-place division.
  *
@@ -44,10 +39,12 @@ register BigNumLength 	nl, dl;
  *    last digit of N < last digit of D
  *    D is normalized (Base/2 <= last digit of D < Base)
  */
-
+static void divide (nn, nl, dd, dl)
+	BigNum		nn, dd;
+	register BigNumLength 	nl, dl;
 {
-   register 	int		ni;
-   		BigNumDigit 	DDigit, BaseMinus1, QApp, RApp;
+	register 	int		ni;
+	BigNumDigit 	DDigit, BaseMinus1, QApp, RApp;
 
 
    /* Initialize constants */
@@ -71,11 +68,11 @@ register BigNumLength 	nl, dl;
 
       /* If first digits of numerator and denominator are the same, */
       if (BnnCompareDigits (*(nn+nl), DDigit) == BN_EQ)
-	 /* Use "Base - 1" for the approximate quotient */
-	 BnnAssign (&QApp, &BaseMinus1, 1);
+		/* Use "Base - 1" for the approximate quotient */
+		BnnAssign (&QApp, &BaseMinus1, 1);
       else
-	 /* Divide the first 2 digits of N by the first digit of D */
-	 RApp = BnnDivideDigit (&QApp, nn+nl-1, 2, DDigit);
+		/* Divide the first 2 digits of N by the first digit of D */
+		RApp = BnnDivideDigit (&QApp, nn+nl-1, 2, DDigit);
 
       /* Compute the remainder */
       BnnMultiplyDigit (nn+ni, dl+1, dd, dl, QApp);
@@ -83,8 +80,8 @@ register BigNumLength 	nl, dl;
       /* Correct the approximate quotient, in case it was too large */
       while (BnnCompareDigits (*(nn+nl), QApp) != BN_EQ)
       {
-	 BnnSubtract (nn+ni, dl+1, dd, dl, 1);	/* Subtract D from N */
-	 BnnSubtractBorrow (&QApp, 1, 0);  	/* Q -= 1 */
+		BnnSubtract (nn+ni, dl+1, dd, dl, 1);	/* Subtract D from N */
+		BnnSubtractBorrow (&QApp, 1, 0);  	/* Q -= 1 */
       }
    }
 

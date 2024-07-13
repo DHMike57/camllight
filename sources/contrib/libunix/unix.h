@@ -16,3 +16,18 @@ void unix_error();
 void uerror();
 #endif
 
+#ifdef HAS_UNISTD
+#include <unistd.h>
+#endif
+
+#ifdef HAS_SOCKETS
+#include <sys/socket.h>
+#endif /* HAS_SOCKETS */
+
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/param.h>
+#include <sys/ioctl.h>
+#include <sys/wait.h>
+#include <stdio.h>

@@ -24,11 +24,20 @@
 #include <values.h>
 */
 
+#ifdef __STDC__
+#include <math.h>
+#include <stdlib.h>
+#include <string.h>
+#else
+extern char *malloc();
+
 #define NULL                    0
-#define max(a,b) 		(a<b ? b : a)
 #define abs(x)			(x>=0 ? x : -(x))
 #define M_LN2	                0.69314718055994530942
 #define M_LN10	                2.30258509299404568402
+#endif
+
+#define max(a,b) 		(a<b ? b : a)
 #define BITSPERBYTE	        8
 #define BITS(type)	        (BITSPERBYTE * (int)sizeof(type))
 #define HIBITI	                (1 << BITS(int) - 1)
@@ -42,10 +51,8 @@
                                  c >= 'A' && c <= 'F' ? c - 'A' + 10:\
                                  0)
 
-extern char *malloc();
 
-                        /*** copyright ***/
-
+/*** copyright ***/
 static char copyright[]="@(#)bz.c: copyright Digital Equipment Corporation & INRIA 1988, 1989\n";
 
 

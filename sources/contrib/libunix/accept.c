@@ -3,6 +3,7 @@
 #include <memory.h>
 #include "unix.h"
 #include "io.h"
+#include "signals.h"
 
 #ifdef HAS_SOCKETS
 

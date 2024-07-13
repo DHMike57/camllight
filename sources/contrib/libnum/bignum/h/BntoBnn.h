@@ -7,10 +7,9 @@
 
 #ifdef __STDC__
 #include <stdlib.h>
+#include <stdio.h>
 #else
-#ifndef VMS
 extern char *malloc();
-#endif
 #endif
 
 		/* old types of Bn */
@@ -89,7 +88,7 @@ BigNum BnCreate(type, size) BigNumType type; int size; {
 }
  
 /* Frees a BigNum structure */
-BnFree(n) BigNum n; {
+int BnFree(n) BigNum n; {
 	free(((struct BigNumHeader *) n) - 1);
         return 1; 
 }
@@ -100,12 +99,12 @@ BigNumType BnGetType(n) BigNum n; {
 }
  
 /* Sets the BigNum's Type */
-BnSetType(n, type) BigNum n; BigNumType type; {
-        BN_TYPE(n) = type;
+void BnSetType(n, type) BigNum n; BigNumType type; {
+	BN_TYPE(n) = type;
 }
  
 /* Returns the number of digits allocated for the BigNum */
-BnGetSize(n) BigNum n; {
+int BnGetSize(n) BigNum n; {
 	return(BN_LENGTH(n));
 }
  

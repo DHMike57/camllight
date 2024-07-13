@@ -22,6 +22,7 @@ static Bool gr_initialized = False;
 static int gr_error_handler();
 static int gr_ioerror_handler();
 value gr_clear_graph();
+void gr_init_color_cache();
 
 value gr_open_graph(arg)
      value arg;

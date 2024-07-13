@@ -2,6 +2,7 @@
 #include "unix.h"
 
 #ifdef HAS_MKFIFO
+#include <sys/types.h>
 
 value unix_mkfifo(path, mode)
      value path;
