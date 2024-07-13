@@ -1,5 +1,14 @@
 #!/bin/sh
-(echo "main() {"
- for f in $*; do echo "  $f();"; done
+# In order to use this script, please
+# provide the following arguments in this order :
+#  The first argument is the function's name
+#  The second are the functions' arguments
+#  The third one is the file to include 
+
+(echo "#include <stddef.h>" # This is needed in order to have NULL
+ echo "#include <$3>"
+ echo "int main(void) {"
+ echo "  $1($2);"
+ echo "  return 0;"
  echo "}") > hasgot.c
 exec $cc -o tst hasgot.c > /dev/null 2>/dev/null

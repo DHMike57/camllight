@@ -1,0 +1,6 @@
+#!/bin/sh
+(echo "#include <$1>"
+ echo "int main(void) {"
+ echo "  return 0;"
+ echo "}") > hasheader.c
+exec $cc -o tst hasheader.c > /dev/null 2>/dev/null

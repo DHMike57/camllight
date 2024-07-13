@@ -171,105 +171,118 @@ fi
 
 # For the sys module
 
-if sh hasgot rename; then
+if sh hasgot rename '"", ""' "stdio.h"; then
   echo "rename() found."
   echo "#define HAS_RENAME" >> s.h
 fi
 
 # For the Unix library
 
-if sh hasgot socket socketpair bind listen accept connect; then
+if sh hasgot socket '0, 0, 0' "sys/socket.h" &&
+   sh hasgot socketpair '0, 0, 0, NULL' "sys/socket.h" &&
+   sh hasgot bind '0, NULL, 0' "sys/socket.h" &&
+   sh hasgot listen '0, 0' "sys/socket.h" &&
+   sh hasgot accept '0, NULL, NULL' "sys/socket.h" &&
+   sh hasgot connect '0, NULL, 0' "sys/socket.h"; then
   echo "You have BSD sockets."
   echo "#define HAS_SOCKETS" >> s.h
 fi
 
-if test -f /usr/include/unistd.h; then
+if sh hasheader unistd.h; then
   echo "unistd.h found."
   echo "#define HAS_UNISTD" >> s.h
 fi
 
-if test -f /usr/include/dirent.h; then
+if sh hasheader dirent.h; then
   echo "dirent.h found."
   echo "#define HAS_DIRENT" >> s.h
 fi
 
-if sh hasgot lockf; then
+if sh hasgot lockf '0, 0, 0' "unistd.h"; then
   echo "lockf() found."
   echo "#define HAS_LOCKF" >> s.h
 fi
 
-if sh hasgot mkfifo; then
+if sh hasgot mkfifo 'NULL, (mode_t) 0' "sys/stat.h"; then
   echo "mkfifo() found."
   echo "#define HAS_MKFIFO" >> s.h
 fi
 
-if sh hasgot getcwd; then
+if sh hasgot getcwd 'NULL, 0' "unistd.h"; then
   echo "getcwd() found."
   echo "#define HAS_GETCWD" >> s.h
 fi
 
-if sh hasgot getwd; then
+if sh hasgot getwd 'NULL, 0' "unistd.h"; then
   echo "getwd() found."
   echo "#define HAS_GETWD" >> s.h
 fi
 
-if sh hasgot getpriority setpriority; then
+if sh hasgot getpriority '0, (id_t) 0' "sys/resource.h" &&
+   sh hasgot setpriority '0, (id_t) 0, 0' "sys/resource.h"; then
   echo "getpriority() found."
   echo "#define HAS_GETPRIORITY" >> s.h
 fi
 
-if test -f /usr/include/utime.h && sh hasgot utime; then
+if sh hasgot utime '"", NULL' "utime.h"; then
   echo "utime() found."
   echo "#define HAS_UTIME" >> s.h
 fi
 
-if sh hasgot utimes; then
+if sh hasgot utimes 'NULL, NULL' "utime.h"; then
   echo "utimes() found."
   echo "#define HAS_UTIMES" >> s.h
 fi
 
-if sh hasgot dup2; then
+if sh hasgot dup2 '0, 0' "unistd.h"; then
   echo "dup2() found."
   echo "#define HAS_DUP2" >> s.h
 fi
 
-if sh hasgot fchmod fchown; then
+if sh hasgot fchmod '0, (mode_t) 0' "sys/stat.h" &&
+   sh hasgot fchown '0, (uid_t) 0, (gid_t) 0' "unistd.h"; then
   echo "fchmod() found."
   echo "#define HAS_FCHMOD" >> s.h
 fi
 
-if sh hasgot truncate ftruncate; then
+if sh hasgot truncate '"", (off_t) 0' "unistd.h" &&
+   sh hasgot ftruncate '0, (off_t) 0' "unistd.h" ; then
   echo "truncate() found."
   echo "#define HAS_TRUNCATE" >> s.h
 fi
 
-if sh hasgot select; then
+if sh hasgot select '0, NULL, NULL, NULL, NULL' "sys/select.h"; then
   echo "select() found."
   echo "#define HAS_SELECT" >> s.h
 fi
 
-if sh hasgot symlink readlink lstat;  then
+if sh hasgot symlink '"", ""' "unistd.h" &&
+   sh hasgot readlink '"", "", 0' "unistd.h" &&
+   sh hasgot lstat '"", NULL' "sys/stat.h";  then
   echo "symlink() found."
   echo "#define HAS_SYMLINK" >> s.h
 fi
 
-if sh hasgot wait3;  then
+if sh hasgot wait3 'NULL, 0, NULL' "sys/wait.h";  then
   echo "wait3() found."
   echo "#define HAS_WAIT3" >> s.h
 fi
 
-if sh hasgot waitpid;  then
+if sh hasgot waitpid '(pid_t) 0, NULL, 0' "sys/wait.h";  then
   echo "waitpid() found."
   echo "#define HAS_WAITPID" >> s.h
 fi
 
-if test -f /usr/include/sys/param.h && sh ./runtest getgroups.c; then
+if sh ./runtest getgroups.c; then
   echo "getgroups() found."
   echo "#define HAS_GETGROUPS" >> s.h
 fi
 
-if test -f /usr/include/termios.h && 
-   sh hasgot tcgetattr tcsetattr tcsendbreak tcflush tcflow; then
+if sh hasgot tcgetattr '0, NULL' "termios.h" &&
+   sh hasgot tcsetattr '0, 0, NULL' "termios.h" &&
+   sh hasgot tcsendbreak '0, 0' "termios.h" &&
+   sh hasgot tcflush '0, 0' "termios.h" &&
+   sh hasgot tcflow '0, 0' "termios.h"; then
   echo "POSIX termios found."
   echo "#define HAS_TERMIOS" >> s.h
 fi
@@ -280,31 +293,31 @@ if sh ./runtest async_io.c; then
   echo "#define HAS_ASYNC_IO" >> s.h
 fi
 
-if sh hasgot setitimer; then
+if sh hasgot setitimer '0, NULL, NULL' "sys/time.h"; then
   echo "setitimer() found."
   echo "#define HAS_SETITIMER" >> s.h
 fi
 
-if sh hasgot gethostname; then
+if sh hasgot gethostname 'NULL, 0' "unistd.h"; then
   echo "gethostname() found."
   echo "#define HAS_GETHOSTNAME" >> s.h
 fi
 
-if test -f /usr/include/sys/utsname.h && sh hasgot uname; then
+if sh hasgot uname 'NULL' "sys/utsname.h"; then
   echo "uname() found."
   echo "#define HAS_UNAME" >> s.h
 fi
 
-if sh hasgot gettimeofday; then
+if sh hasgot gettimeofday 'NULL, NULL' "sys/time.h"; then
   echo "gettimeofday() found."
   echo "#define HAS_GETTIMEOFDAY" >> s.h
 fi
 
-if sh hasgot strerror; then
+if sh hasgot strerror '0' "string.h"; then
   echo "strerror() found."
   echo "#define HAS_STRERROR" >> s.h
 fi
 
-rm -f tst hasgot.c
+rm -f tst hasgot.c hasheader.c
 rm -f ../m.h ../s.h
 mv m.h s.h ..
